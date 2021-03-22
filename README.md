@@ -16,7 +16,7 @@ Test the API with [Postman](https://www.postman.com/).
 ### GET
 #### Get all:
 ```
-http://localhost:5000/api/VideoRentalItems/
+http://localhost:8080/api/VideoRentalItems/
 ```
 Example output:
 ```JSON
@@ -55,7 +55,7 @@ Example output:
 ```
 #### Get by Id:
 ```
-http://localhost:5000/api/VideoRentalItems/3
+http://localhost:8080/api/VideoRentalItems/3
 ```
 Example output:
 ```JSON
@@ -72,7 +72,7 @@ Example output:
 ```
 ### POST
 ```
-http://localhost:5000/api/VideoRentalItems/
+http://localhost:8080/api/VideoRentalItems/
 ```
 Example input:
 ```JSON
@@ -88,7 +88,7 @@ Example input:
 ```
 ### PUT
 ```
-http://localhost:5000/api/VideoRentalItems/3
+http://localhost:8080/api/VideoRentalItems/3
 ```
 Example input:
 ```JSON
@@ -105,5 +105,5 @@ Example input:
 ```
 ### DELETE
 ```
-http://localhost:5000/api/VideoRentalItems/3
+http://localhost:8080/api/VideoRentalItems/3
 ```
