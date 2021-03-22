@@ -7,8 +7,14 @@ services:
         ports:
             - "5000:5000"
         container_name: contacts
+        networks:
+            - my-network
     video-rental:
         build: .
         ports:
-            - "80:8080"
+            - "80:80"
         container_name: video-rental
+        networks:
+            - my-network
+networks:
+    my-network:
