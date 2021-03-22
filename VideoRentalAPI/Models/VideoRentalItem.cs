@@ -10,6 +10,7 @@ namespace VideoRentalAPI.Models
         public int Duration { get; set; }
         public string Language { get; set; }
         public string Rating { get; set; }
+        public string RenterId { get; set; }
         public bool IsRented { get; set; }
     }
 }

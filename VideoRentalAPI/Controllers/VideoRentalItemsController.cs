@@ -2,8 +2,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http;
 using Microsoft.EntityFrameworkCore;
 using VideoRentalAPI.Models;
+using Newtonsoft.Json;
 
 namespace VideoRentalAPI.Controllers
 {
@@ -12,11 +14,12 @@ namespace VideoRentalAPI.Controllers
     public class VideoRentalItemsController : ControllerBase
     {
         private readonly VideoRentalContext _context;
-
+        private readonly string path = "http://contacts:5000/contacts/";
 
         public VideoRentalItemsController(VideoRentalContext context)
         {
             _context = context;
+
             if (!_context.VideoRentalItems.Any())
             {
                 _context.VideoRentalItems.Add(new VideoRentalItem
@@ -28,6 +31,7 @@ namespace VideoRentalAPI.Controllers
                     Duration = 136,
                     Language = "English",
                     Rating = "R",
+                    RenterId = "12345",
                     IsRented = true
                 });
                 _context.VideoRentalItems.Add(new VideoRentalItem
@@ -50,6 +54,7 @@ namespace VideoRentalAPI.Controllers
                     Duration = 102,
                     Language = "English",
                     Rating = "PG",
+                    RenterId = "87014",
                     IsRented = true
                 });
                 _context.SaveChanges();
@@ -75,6 +80,37 @@ namespace VideoRentalAPI.Controllers
             }
 
             return videoRentalItem;
+        }
+
+        // GET: api/VideoRentalItems/5/renter
+        [HttpGet("{id}/renter")]
+        public async Task<ActionResult<RenterItem>> GetVideoRentalItemRenter(long id)
+        {
+            var videoRentalItem = await _context.VideoRentalItems.FindAsync(id);
+
+            if (videoRentalItem == null)
+            {
+                string message = $"Video rental item with id {id} does not exist!";
+                return NotFound(message);
+            }
+
+            if (videoRentalItem.RenterId == null)
+            {
+                string message = $"Video rental item with id {id} does not have a renter.";
+                return BadRequest(message);
+            }
+
+            RenterItem renter = null;
+            using (var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.GetAsync(path + videoRentalItem.RenterId))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    renter = JsonConvert.DeserializeObject<RenterItem>(apiResponse);
+                }
+            }
+
+            return renter;
         }
 
         // PUT: api/VideoRentalItems/5
