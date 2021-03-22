@@ -4,7 +4,7 @@ Simple CRUD project for VU Web Services course.
 Clone the repository:
 ```bash
 git clone https://github.com/simuad/Video-Rentals.git
-cd Web-Services
+cd Video-Rentals
 ```
 Launch docker container:
 ```bash
