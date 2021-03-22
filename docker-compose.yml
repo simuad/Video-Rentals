@@ -1,0 +1,7 @@
+version: '3'
+services:
+    video-rental:
+        build: .
+        ports:
+            - "5000:80"
+        container_name: video-rental-api
