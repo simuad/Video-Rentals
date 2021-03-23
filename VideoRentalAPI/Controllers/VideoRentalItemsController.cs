@@ -43,6 +43,7 @@ namespace VideoRentalAPI.Controllers
                     Duration = 119,
                     Language = "English",
                     Rating = "PG",
+                    RenterId = "87014",
                     IsRented = false
                 });
                 _context.VideoRentalItems.Add(new VideoRentalItem
@@ -113,6 +114,14 @@ namespace VideoRentalAPI.Controllers
             return renter;
         }
 
+        // GET: api/VideoRentalItems/rented
+        [HttpGet("rented")]
+        public async Task<ActionResult<IEnumerable<VideoRentalItem>>> GetRentedVideoRentalItems()
+        {
+
+            return await _context.VideoRentalItems.Where(e => e.IsRented == true).ToListAsync();
+        }
+
         // PUT: api/VideoRentalItems/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutVideoRentalItem(long id, VideoRentalItem videoRentalItem)
@@ -174,6 +183,38 @@ namespace VideoRentalAPI.Controllers
             }
 
             _context.VideoRentalItems.Remove(videoRentalItem);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        // DELETE: api/VideoRentalItems/5/renter
+        [HttpDelete("{id}/renter")]
+        public async Task<IActionResult> DeleteVideoRentalItemRenter(long id)
+        {
+            var videoRentalItem = await _context.VideoRentalItems.FindAsync(id);
+            
+            if (videoRentalItem == null)
+            {
+                return NotFound();
+            }
+
+            using (var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.DeleteAsync(path + videoRentalItem.RenterId))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                }
+            }
+
+            string renterId = videoRentalItem.RenterId;
+
+            foreach(var item in _context.VideoRentalItems.Where(e => e.RenterId == renterId))
+            {
+                item.RenterId = null;
+                item.IsRented = false;
+            }
+
             await _context.SaveChangesAsync();
 
             return NoContent();
