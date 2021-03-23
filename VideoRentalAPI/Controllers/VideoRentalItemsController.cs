@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
 using Microsoft.EntityFrameworkCore;
@@ -157,6 +158,34 @@ namespace VideoRentalAPI.Controllers
             return NoContent();
         }
 
+        // PUT: api/VideoRentalItems/5/renter
+        [HttpPut("{id}/renter")]
+        public async Task<IActionResult> PutVideoRentalItemRenter(long id, RenterItem renterItem)
+        {
+            var videoRentalItem = await _context.VideoRentalItems.FindAsync(id);
+
+            if (videoRentalItem == null)
+            {
+                string message = $"Video rental item with id {id} does not exist!";
+                return NotFound(message);
+            }
+            
+            string renterId = videoRentalItem.RenterId;
+
+            using (var httpClient = new HttpClient())
+            {
+                var json = JsonConvert.SerializeObject(renterItem);
+                var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+                using (var response = await httpClient.PutAsync(path + renterId, httpContent))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    return NotFound(apiResponse);
+                }
+            }
+
+            return NoContent();
+        }
+
         // POST: api/VideoRentalItems
         [HttpPost]
         public async Task<ActionResult<VideoRentalItem>> PostVideoRentalItem(VideoRentalItem videoRentalItem)
@@ -170,6 +199,25 @@ namespace VideoRentalAPI.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetVideoRentalItem), new { id = videoRentalItem.Id }, videoRentalItem);
+        }
+
+        // POST: api/VideoRentalItems/3/renter
+        [HttpPost("{id}/renter")]
+        public async Task<IActionResult> PostVideoRentalItemRenter(long id, RenterItem renterItem)
+        {
+            var videoRentalItem = await _context.VideoRentalItems.FindAsync(id);
+            if (videoRentalItem == null)
+            {
+                return NotFound();
+            }
+
+            string renterId = videoRentalItem.RenterId;
+
+            string initalJson = JsonConvert.SerializeObject(renterItem);
+            var json = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(initalJson);
+            json.Property("id").Remove();
+
+            return NotFound(json.ToString());
         }
 
         // DELETE: api/VideoRentalItems/5
@@ -199,15 +247,15 @@ namespace VideoRentalAPI.Controllers
                 return NotFound();
             }
 
+            string renterId = videoRentalItem.RenterId;
+
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.DeleteAsync(path + videoRentalItem.RenterId))
+                using (var response = await httpClient.DeleteAsync(path + renterId))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
                 }
             }
-
-            string renterId = videoRentalItem.RenterId;
 
             foreach(var item in _context.VideoRentalItems.Where(e => e.RenterId == renterId))
             {

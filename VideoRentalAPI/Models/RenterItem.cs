@@ -1,4 +1,3 @@
-
 namespace VideoRentalAPI.Models
 {
     public class RenterItem
