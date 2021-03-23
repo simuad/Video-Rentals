@@ -7,6 +7,7 @@ using System.Net.Http;
 using Microsoft.EntityFrameworkCore;
 using VideoRentalAPI.Models;
 using Newtonsoft.Json;
+using System;
 
 namespace VideoRentalAPI.Controllers
 {
@@ -175,11 +176,12 @@ namespace VideoRentalAPI.Controllers
             using (var httpClient = new HttpClient())
             {
                 var json = JsonConvert.SerializeObject(renterItem);
+                Console.WriteLine("{0}", json);
                 var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
                 using (var response = await httpClient.PutAsync(path + renterId, httpContent))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    return NotFound(apiResponse);
+                    Console.WriteLine("{0}", apiResponse);
                 }
             }
 
