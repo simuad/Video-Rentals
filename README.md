@@ -35,8 +35,13 @@ http://localhost:80/api/VideoRentalItems/rented
 http://localhost:80/api/VideoRentalItems/
 ```
 ### PUT
+#### Update item by id:
 ```
 http://localhost:80/api/VideoRentalItems/{id}
+```
+#### Update item's renter by id:
+```
+http://localhost:80/api/VideoRentalItems/{id}/renter
 ```
 ### DELETE
 #### Delete an item
