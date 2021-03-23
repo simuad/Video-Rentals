@@ -41,9 +41,9 @@ http://localhost:80/api/VideoRentalItems/{id}
 ### DELETE
 #### Delete an item
 ```
-http://localhost:8080/api/VideoRentalItems/{id}
+http://localhost:80/api/VideoRentalItems/{id}
 ```
 #### Delete renter of an item
 ```
-http://localhost:8080/api/VideoRentalItems/{id}/renter
+http://localhost:80/api/VideoRentalItems/{id}/renter
 ```

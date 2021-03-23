@@ -217,7 +217,7 @@ namespace VideoRentalAPI.Controllers
             var json = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(initalJson);
             json.Property("id").Remove();
 
-            return NotFound(json.ToString());
+            return NotFound();
         }
 
         // DELETE: api/VideoRentalItems/5
