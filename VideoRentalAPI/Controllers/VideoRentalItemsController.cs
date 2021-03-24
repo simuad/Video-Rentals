@@ -176,12 +176,10 @@ namespace VideoRentalAPI.Controllers
             using (var httpClient = new HttpClient())
             {
                 var json = JsonConvert.SerializeObject(renterItem);
-                Console.WriteLine("{0}", json);
                 var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
                 using (var response = await httpClient.PutAsync(path + renterId, httpContent))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine("{0}", apiResponse);
                 }
             }
 
@@ -201,25 +199,6 @@ namespace VideoRentalAPI.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetVideoRentalItem), new { id = videoRentalItem.Id }, videoRentalItem);
-        }
-
-        // POST: api/VideoRentalItems/3/renter
-        [HttpPost("{id}/renter")]
-        public async Task<IActionResult> PostVideoRentalItemRenter(long id, RenterItem renterItem)
-        {
-            var videoRentalItem = await _context.VideoRentalItems.FindAsync(id);
-            if (videoRentalItem == null)
-            {
-                return NotFound();
-            }
-
-            string renterId = videoRentalItem.RenterId;
-
-            string initalJson = JsonConvert.SerializeObject(renterItem);
-            var json = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(initalJson);
-            json.Property("id").Remove();
-
-            return NotFound();
         }
 
         // DELETE: api/VideoRentalItems/5

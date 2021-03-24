@@ -31,6 +31,7 @@ http://localhost:80/api/VideoRentalItems/{id}/renter
 http://localhost:80/api/VideoRentalItems/rented
 ```
 ### POST
+#### Create new item:
 ```
 http://localhost:80/api/VideoRentalItems/
 ```
