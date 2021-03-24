@@ -112,7 +112,7 @@ namespace VideoRentalAPI.Controllers
                     renter = JsonConvert.DeserializeObject<RenterItem>(apiResponse);
                 }
             }
-
+            renter.Id = long.Parse(videoRentalItem.RenterId);
             return renter;
         }
 
