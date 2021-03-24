@@ -13,6 +13,35 @@ docket-compose up
 ```
 ## Usage
 Test the API with [Postman](https://www.postman.com/).
+
+### Example JSON
+#### Item:
+
+```JSON
+{
+    "id": 1,
+    "title": "A Clockwork Orange",
+    "genre": "Crime",
+    "releaseYear": 1971,
+    "duration": 136,
+    "language": "English",
+    "rating": "R",
+    "renterId": "12345",
+    "isRented": true
+}
+```
+#### Contact:
+
+```JSON
+{
+    "id": 74638,
+    "surname": "Dirk",
+    "name": "Mike",
+    "number": "+37064787734",
+    "email": "mikedirk@mail.com"
+}
+```
+
 ### GET
 #### Get all items:
 ```
