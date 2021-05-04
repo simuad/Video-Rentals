@@ -51,7 +51,7 @@ http://localhost:80/api/VideoRentalItems/
 ```
 http://localhost:80/api/VideoRentalItems/{id}
 ```
-#### Get renter of an item:
+#### Get item with extended information about renter:
 ```
 http://localhost:80/api/VideoRentalItems/{id}/renter
 ```

@@ -46,7 +46,7 @@ namespace VideoRentalAPI.Controllers
                     Language = "English",
                     Rating = "PG",
                     RenterId = "87014",
-                    IsRented = false
+                    IsRented = true
                 });
                 _context.VideoRentalItems.Add(new VideoRentalItem
                 {
@@ -71,6 +71,45 @@ namespace VideoRentalAPI.Controllers
             return await _context.VideoRentalItems.ToListAsync();
         }
 
+        // GET: api/VideoRentalItems/more/
+        [HttpGet("renter/{filter?}")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetVideoRentalItemsRenter(bool filter = true)
+        {
+            if(filter){
+                var videoRentalItems =  await _context.VideoRentalItems.ToListAsync();
+                List<Object> videoRentalItemsRenters = new List<Object>();
+                foreach(var item in videoRentalItems)
+                {
+                    RenterItem renter = null;
+                    try
+                    {
+                        using (var httpClient = new HttpClient())
+                        {
+                            using (var response = await httpClient.GetAsync(path + item.RenterId))
+                            {
+                                string apiResponse = await response.Content.ReadAsStringAsync();
+                                renter = JsonConvert.DeserializeObject<RenterItem>(apiResponse);
+                            }
+                        }
+                        
+                        VideoRentalItemRenter itemWithRenter = new VideoRentalItemRenter(item);
+                        itemWithRenter.Renter = renter;
+                        videoRentalItemsRenters.Add(itemWithRenter);
+                    }
+                    catch (Exception exception) {
+                        System.Diagnostics.Debug.WriteLine(exception);
+                        videoRentalItemsRenters.Add(item);
+                    }
+
+                }
+                return videoRentalItemsRenters;
+            }
+            else
+            {
+                return await _context.VideoRentalItems.ToListAsync();
+            }
+        }
+
         // GET: api/VideoRentalItems/5
         [HttpGet("{id}")]
         public async Task<ActionResult<VideoRentalItem>> GetVideoRentalItem(long id)
@@ -79,7 +118,8 @@ namespace VideoRentalAPI.Controllers
 
             if (videoRentalItem == null)
             {
-                return NotFound();
+                string message = $"Video rental item with id {id} does not exist!";
+                return NotFound(message);
             }
 
             return videoRentalItem;
@@ -87,7 +127,7 @@ namespace VideoRentalAPI.Controllers
 
         // GET: api/VideoRentalItems/5/renter
         [HttpGet("{id}/renter")]
-        public async Task<ActionResult<RenterItem>> GetVideoRentalItemRenter(long id)
+        public async Task<ActionResult<dynamic>> GetVideoRentalItemRenter(long id)
         {
             var videoRentalItem = await _context.VideoRentalItems.FindAsync(id);
 
@@ -104,24 +144,27 @@ namespace VideoRentalAPI.Controllers
             }
 
             RenterItem renter = null;
-            using (var httpClient = new HttpClient())
+            try
             {
-                using (var response = await httpClient.GetAsync(path + videoRentalItem.RenterId))
+                using (var httpClient = new HttpClient())
                 {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    renter = JsonConvert.DeserializeObject<RenterItem>(apiResponse);
+                    using (var response = await httpClient.GetAsync(path + videoRentalItem.RenterId))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        renter = JsonConvert.DeserializeObject<RenterItem>(apiResponse);
+                    }
                 }
             }
+            catch (Exception exception) {
+                System.Diagnostics.Debug.WriteLine(exception);
+                return videoRentalItem;
+            }
+
             renter.Id = long.Parse(videoRentalItem.RenterId);
-            return renter;
-        }
-
-        // GET: api/VideoRentalItems/rented
-        [HttpGet("rented")]
-        public async Task<ActionResult<IEnumerable<VideoRentalItem>>> GetRentedVideoRentalItems()
-        {
-
-            return await _context.VideoRentalItems.Where(e => e.IsRented == true).ToListAsync();
+            VideoRentalItemRenter videoRentalItemRenter = new VideoRentalItemRenter(videoRentalItem);
+            videoRentalItemRenter.Renter = renter;
+            
+            return videoRentalItemRenter;
         }
 
         // PUT: api/VideoRentalItems/5
