@@ -15,37 +15,54 @@ docket-compose up
 Test the API with [Postman](https://www.postman.com/).
 
 ### Example JSON
-#### Item:
 
 ```JSON
-{
-    "id": 1,
-    "title": "A Clockwork Orange",
-    "genre": "Crime",
-    "releaseYear": 1971,
-    "duration": 136,
-    "language": "English",
-    "rating": "R",
-    "renterId": "12345",
-    "isRented": true
-}
-```
-#### Contact:
-
-```JSON
-{
-    "id": 74638,
-    "surname": "Dirk",
-    "name": "Mike",
-    "number": "+37064787734",
-    "email": "mikedirk@mail.com"
-}
+[
+    {
+        "id": 1,
+        "title": "A Clockwork Orange",
+        "genre": "Crime",
+        "releaseYear": 1971,
+        "duration": 136,
+        "language": "English",
+        "rating": "R",
+        "renter": {
+            "id": 0,
+            "surname": "Vangogh",
+            "name": "Jake",
+            "number": "+37065841738",
+            "email": "jakevan@mail.com"
+        },
+        "isRented": true
+    },
+    {
+        "id": 2,
+        "title": "Citizen Kane",
+        "genre": "Drama",
+        "releaseYear": 1941,
+        "duration": 119,
+        "language": "English",
+        "rating": "PG",
+        "renter": {
+            "id": 0,
+            "surname": "Davis",
+            "name": "Luke",
+            "number": "+37064787735",
+            "email": "davisluke@mail.com"
+        },
+        "isRented": true
+    }
+]
 ```
 
 ### GET
 #### Get all items:
 ```
 http://localhost:80/api/VideoRentalItems/
+```
+#### Get all items with information about renter:
+```
+http://localhost:80/api/VideoRentalItems/renter
 ```
 #### Get an item by id:
 ```
@@ -54,10 +71,6 @@ http://localhost:80/api/VideoRentalItems/{id}
 #### Get item with extended information about renter:
 ```
 http://localhost:80/api/VideoRentalItems/{id}/renter
-```
-#### Get all rented items:
-```
-http://localhost:80/api/VideoRentalItems/rented
 ```
 ### POST
 #### Create new item:
