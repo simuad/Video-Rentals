@@ -43,13 +43,7 @@ Test the API with [Postman](https://www.postman.com/).
         "duration": 119,
         "language": "English",
         "rating": "PG",
-        "renter": {
-            "id": 0,
-            "surname": "Davis",
-            "name": "Luke",
-            "number": "+37064787735",
-            "email": "davisluke@mail.com"
-        },
+        "RenterId" : "12345",
         "isRented": true
     }
 ]
@@ -76,6 +70,10 @@ http://localhost:80/api/VideoRentalItems/{id}/renter
 #### Create new item:
 ```
 http://localhost:80/api/VideoRentalItems/
+```
+#### Create new item with renter:
+```
+http://localhost:80/api/VideoRentalItems/renter
 ```
 ### PUT
 #### Update item by id:
