@@ -244,6 +244,43 @@ namespace VideoRentalAPI.Controllers
             return CreatedAtAction(nameof(GetVideoRentalItem), new { id = videoRentalItem.Id }, videoRentalItem);
         }
 
+        // POST: api/VideoRentalItems/renter
+        [HttpPost("renter")]
+        public async Task<ActionResult<VideoRentalItemRenter>> PostVideoRentalItemRenter(VideoRentalItemRenter videoRentalItemRenter)
+        {
+            VideoRentalItem videoRentalItem = new VideoRentalItem(videoRentalItemRenter);
+            _context.VideoRentalItems.Add(videoRentalItem);
+
+            if(VideoRentalItemExists(videoRentalItem.Id))
+            {
+                return BadRequest("Error: An item with the same key already exists!");
+            }
+
+            RenterItem renterItem = videoRentalItemRenter.Renter;
+            RenterItemId renterItemId = new RenterItemId(renterItem);
+
+            try
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    var json = JsonConvert.SerializeObject(renterItemId);
+                    var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+                    using (var response = await httpClient.PostAsync(path, httpContent))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                    }
+                }
+            }
+            catch (Exception exception) {
+                System.Diagnostics.Debug.WriteLine(exception);
+                return StatusCode(503);
+            }
+
+            await _context.SaveChangesAsync();
+            videoRentalItemRenter.Id = videoRentalItem.Id;
+            return StatusCode(201, videoRentalItemRenter);
+        }
+
         // DELETE: api/VideoRentalItems/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteVideoRentalItem(long id)

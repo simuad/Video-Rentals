@@ -23,5 +23,19 @@ namespace VideoRentalAPI.Models
             this.Rating = videoRentalItem.Rating;
             this.IsRented = videoRentalItem.IsRented;
         }
+        public VideoRentalItemRenter(VideoRentalItemRenter videoRentalItemRenter){
+            this.Id = videoRentalItemRenter.Id;
+            this.Title = videoRentalItemRenter.Title;
+            this.Genre = videoRentalItemRenter.Genre;
+            this.ReleaseYear = videoRentalItemRenter.ReleaseYear;
+            this.Duration = videoRentalItemRenter.Duration;
+            this.Language = videoRentalItemRenter.Language;
+            this.Rating = videoRentalItemRenter.Rating;
+            this.IsRented = videoRentalItemRenter.IsRented;
+        }
+
+        public VideoRentalItemRenter(){
+            
+        }
     }
 }

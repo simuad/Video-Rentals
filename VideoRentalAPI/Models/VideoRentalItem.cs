@@ -12,5 +12,22 @@ namespace VideoRentalAPI.Models
         public string Rating { get; set; }
         public string RenterId { get; set; }
         public bool IsRented { get; set; }
+
+        public VideoRentalItem (VideoRentalItemRenter VideoRentalItemRenter) {
+            
+            this.Id = VideoRentalItemRenter.Id;
+            this.Title = VideoRentalItemRenter.Title;
+            this.Genre = VideoRentalItemRenter.Genre;
+            this.ReleaseYear = VideoRentalItemRenter.ReleaseYear;
+            this.Duration = VideoRentalItemRenter.Duration;
+            this.Language = VideoRentalItemRenter.Language;
+            this.Rating = VideoRentalItemRenter.Rating;
+            this.RenterId = VideoRentalItemRenter.Renter.Id.ToString();
+            this.IsRented = VideoRentalItemRenter.IsRented;
+        }
+
+        public VideoRentalItem () {
+            
+        }
     }
 }
