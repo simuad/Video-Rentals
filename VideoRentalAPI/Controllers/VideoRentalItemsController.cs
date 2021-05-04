@@ -71,7 +71,7 @@ namespace VideoRentalAPI.Controllers
             return await _context.VideoRentalItems.ToListAsync();
         }
 
-        // GET: api/VideoRentalItems/more/
+        // GET: api/VideoRentalItems/renter/
         [HttpGet("renter/{filter?}")]
         public async Task<ActionResult<IEnumerable<dynamic>>> GetVideoRentalItemsRenter(bool filter = true)
         {
