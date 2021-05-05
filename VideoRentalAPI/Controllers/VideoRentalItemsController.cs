@@ -275,7 +275,7 @@ namespace VideoRentalAPI.Controllers
                 System.Diagnostics.Debug.WriteLine(exception);
                 return StatusCode(503);
             }
-
+            videoRentalItem.Id = videoRentalItem.Id;
             await _context.SaveChangesAsync();
             videoRentalItemRenter.Id = videoRentalItem.Id;
             return StatusCode(201, videoRentalItemRenter);

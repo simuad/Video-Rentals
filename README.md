@@ -3,13 +3,13 @@ Simple CRUD project for VU Web Services course.
 ## Installation
 Clone the repository:
 ```bash
-git clone https://github.com/simuad/Video-Rentals.git
+git clone --recurse https://github.com/simuad/Video-Rentals.git
 cd Video-Rentals
 ```
 Launch docker container:
 ```bash
 docker-compose build
-docket-compose up
+docker-compose up
 ```
 ## Usage
 Test the API with [Postman](https://www.postman.com/).
